@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'colors.dart';
 
 void main() {
@@ -15,14 +16,44 @@ class CalculatorApp extends StatefulWidget {
 }
 
 class _CalculatorAppState extends State<CalculatorApp> {
-  onButtonCLick(value) {
-    print(value);
-  }
-
-  double input = 0.0;
-  double output = 0.0;
+  var input = '';
+  var output = '';
   var firstNum = '';
   var secondNum = '';
+
+  onButtonCLick(value) {
+    if (value == 'AC') {
+      input = ' ';
+      output = ' ';
+    } else if (value == 'DEL') {
+      if (input.isNotEmpty) {
+        input = input.substring(0, input.length - 1);
+      }
+    } else if (value == '=') {
+      var userInput = input;
+      if (input.contains('÷')) {
+        userInput = input.replaceAll('÷', '/');
+      } else if (input.contains('x')) {
+        userInput = input.replaceAll('x', '*');
+      }
+
+      //userInput = input.replaceAll('÷', '/');
+
+      Parser p = Parser();
+
+      Expression expression = p.parse(userInput);
+      ContextModel cm = ContextModel();
+      var finalAns = expression.evaluate(EvaluationType.REAL, cm);
+      output = finalAns.toString();
+      if (output.endsWith('.0')) {
+        output = output.substring(0, output.length - 2);
+      }
+    } else {
+      input = input + value;
+    }
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +71,13 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '$input',
+                    input,
                     style: const TextStyle(
                       fontSize: 40,
                     ),
                   ),
                   Text(
-                    "$output",
+                    output,
                     style: const TextStyle(fontSize: 38),
                   )
                 ],
