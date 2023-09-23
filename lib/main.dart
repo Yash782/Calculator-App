@@ -21,6 +21,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
   var output = '';
   var firstNum = '';
   var secondNum = '';
+  var hideInput = false;
+  double outputSize = 30;
+  var outputColor = Color(0xFFD9D9D9);
 
   onButtonCLick(value) {
     if (value == 'AC') {
@@ -50,9 +53,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
         if (output.endsWith('.0')) {
           output = output.substring(0, output.length - 2);
         }
+        input = output;
+        hideInput = true;
+        outputSize = 50;
+        outputColor = const Color.fromARGB(255, 255, 255, 255);
       }
     } else {
       input = input + value;
+      hideInput = false;
+      outputSize = 40;
+      outputColor = const Color.fromARGB(255, 156, 152, 152);
     }
 
     setState(() {});
@@ -61,6 +71,14 @@ class _CalculatorAppState extends State<CalculatorApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Calculator",
+          style: TextStyle(),
+        ),
+        backgroundColor: operatorColor,
+        centerTitle: true,
+      ),
       backgroundColor: Colors.black87,
       body: Column(
         children: [
@@ -74,12 +92,12 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    input,
+                    hideInput ? '' : input,
                     style: const TextStyle(fontSize: 40, color: Colors.white),
                   ),
                   Text(
                     output,
-                    style: const TextStyle(fontSize: 50, color: Colors.white),
+                    style: TextStyle(fontSize: outputSize, color: outputColor),
                   )
                 ],
               ),
