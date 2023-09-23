@@ -5,6 +5,7 @@ import 'colors.dart';
 void main() {
   runApp(const MaterialApp(
     home: CalculatorApp(),
+    debugShowCheckedModeBanner: false,
   ));
 }
 
