@@ -30,23 +30,25 @@ class _CalculatorAppState extends State<CalculatorApp> {
         input = input.substring(0, input.length - 1);
       }
     } else if (value == '=') {
-      var userInput = input;
-      if (input.contains('÷')) {
-        userInput = input.replaceAll('÷', '/');
-      } else if (input.contains('x')) {
-        userInput = input.replaceAll('x', '*');
-      }
+      if (input.isNotEmpty) {
+        var userInput = input;
+        if (input.contains('÷')) {
+          userInput = input.replaceAll('÷', '/');
+        } else if (input.contains('x')) {
+          userInput = input.replaceAll('x', '*');
+        }
 
-      //userInput = input.replaceAll('÷', '/');
+        //userInput = input.replaceAll('÷', '/');
 
-      Parser p = Parser();
+        Parser p = Parser();
 
-      Expression expression = p.parse(userInput);
-      ContextModel cm = ContextModel();
-      var finalAns = expression.evaluate(EvaluationType.REAL, cm);
-      output = finalAns.toString();
-      if (output.endsWith('.0')) {
-        output = output.substring(0, output.length - 2);
+        Expression expression = p.parse(userInput);
+        ContextModel cm = ContextModel();
+        var finalAns = expression.evaluate(EvaluationType.REAL, cm);
+        output = finalAns.toString();
+        if (output.endsWith('.0')) {
+          output = output.substring(0, output.length - 2);
+        }
       }
     } else {
       input = input + value;
@@ -58,27 +60,25 @@ class _CalculatorAppState extends State<CalculatorApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black38,
+      backgroundColor: Colors.black87,
       body: Column(
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.amber,
+              padding: const EdgeInsets.all(20),
+              color: const Color(0xFF191919),
               width: double.infinity,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
                     input,
-                    style: const TextStyle(
-                      fontSize: 40,
-                    ),
+                    style: const TextStyle(fontSize: 40, color: Colors.white),
                   ),
                   Text(
                     output,
-                    style: const TextStyle(fontSize: 38),
+                    style: const TextStyle(fontSize: 50, color: Colors.white),
                   )
                 ],
               ),
@@ -111,9 +111,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
           ),
           Row(
             children: [
-              button(text: '3'),
-              button(text: '2'),
               button(text: '1'),
+              button(text: '2'),
+              button(text: '3'),
               button(text: '+', buttonBgColor: operatorColor)
             ],
           ),
@@ -139,6 +139,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
         child: ElevatedButton(
           onPressed: () => onButtonCLick(text),
           style: ElevatedButton.styleFrom(
+              elevation: 40,
               backgroundColor: buttonBgColor,
               padding: const EdgeInsets.all(16)),
           child: Text(
